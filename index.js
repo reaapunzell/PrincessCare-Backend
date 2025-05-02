@@ -8,6 +8,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+import aiRoutes from "./routes/aiRoutes.js";
+app.use("/api/ai", aiRoutes);
+
 app.get("/", (req, res) => {
   res.send("PrincessCare backend is running");
 });
