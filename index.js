@@ -1,9 +1,8 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
+import "dotenv/config";
 
-dotenv.config();
-
+// Create an Express app
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -15,5 +14,10 @@ app.get("/", (req, res) => {
   res.send("PrincessCare backend is running");
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`server running on ${PORT}`));
+// Define a port
+const PORT = process.env.PORT || 2020;
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
