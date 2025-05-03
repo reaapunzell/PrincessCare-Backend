@@ -29,6 +29,12 @@ const UserSchema = new mongoose.Schema(
     cycleData: {
       lastPeriodDate: Date,
       symptoms: [String],
+      periodDuration: {
+        type: Number,
+        required: false,
+        min: 1,
+        max: 20,
+      },
     },
   },
   { timestamps: true }
