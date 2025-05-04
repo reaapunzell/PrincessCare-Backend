@@ -81,4 +81,41 @@ router.post("/cycletracking", async (req, res) => {
   }
 });
 
+router.post("/aimenstrualhealth", async (req, res) => {
+  const { input } = req.body;
+
+  if (!input || input.trim() === "") {
+    return res.status(400).json({ error: "Input is required" });
+  }
+
+  try {
+    const result = await client.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an assistant that helps educate people about menstrual cycles.",
+        },
+        {
+          role: "user",
+          content: `Educate me about the menstrual cycle based on: ${JSON.stringify(
+            input
+          )}`,
+        },
+      ],
+      max_tokens: 200,
+      temperature: 1,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+    });
+
+    // Return the AI response
+    res.json(result.choices[0].message.content);
+  } catch (error) {
+    console.error("Azure OpenAI Error:", error);
+    res.status(500).json({ error: "AI Q&A failed", details: error.message });
+  }
+});
+
 export default router;
