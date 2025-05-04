@@ -31,7 +31,6 @@ router.post("/signup", async (req, res) => {
           last_name: lastName,
           email,
           password: hashedPassword,
-          cycle_data: cycleData || null,
         },
       ])
       .select();
@@ -121,6 +120,60 @@ router.get("/profile", async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(401).json({ error: "Invalid token" });
+  }
+});
+
+router.post("/add-period", async (req, res) => {
+  const { userId, startDate, endDate, notes } = req.body;
+
+  if (!userId || !startDate) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("period_history")
+      .insert([
+        {
+          user_id: userId,
+          start_date: startDate,
+          end_date: endDate || null,
+          notes: notes || null,
+        },
+      ])
+      .select();
+
+    if (error) {
+      console.error("Error adding period:", error);
+      return res.status(500).json({ error: error.message });
+    }
+
+    res.json({ message: "Period added", data });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.get("/period-history/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const { data, error } = await supabase
+      .from("period_history")
+      .select("*")
+      .eq("user_id", userId)
+      .order("start_date", { ascending: false });
+
+    if (error) {
+      console.error("Fetch error:", error);
+      return res.status(500).json({ error: error.message });
+    }
+
+    res.json({ history: data });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
