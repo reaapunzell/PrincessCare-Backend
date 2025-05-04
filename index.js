@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import "dotenv/connpfig";
+import "dotenv/config";
 import { supabase } from "./db.js";
 
 // Create an Express app
