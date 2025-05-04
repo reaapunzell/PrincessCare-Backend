@@ -1,12 +1,18 @@
 import express from "express";
 import cors from "cors";
-import "dotenv/config";
+import "dotenv/connpfig";
 import { supabase } from "./db.js";
 
 // Create an Express app
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 import aiRoutes from "./routes/aiRoutes.js";
 app.use("/api/ai", aiRoutes);
